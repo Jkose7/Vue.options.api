@@ -1,24 +1,16 @@
-# vue-option-api
+# Install project
 
-## Project setup
+## Clone project 
+```
+git clone https://github.com/Jkose7/Vue.options.api.git
+```
+
+### Install dependences
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Initilize serve
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
