@@ -10,7 +10,7 @@ git clone https://github.com/Jkose7/Vue.options.api.git
 npm install
 ```
 
-### Initilize serve
+### Initialize serve
 ```
 npm run serve
 ```
