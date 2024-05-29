@@ -11,19 +11,38 @@ export default {
 </script>
 
 <template>
-  <main class="color-change-section">
-    <ColorChangeDiv />
-    <ColorChangeDiv />
-    <ColorChangeDiv />
-  </main>
+  <section>
+    <h1>Click to change color</h1>
+    <main class="color-change-section">
+      <ColorChangeDiv />
+      <ColorChangeDiv />
+      <ColorChangeDiv />
+    </main>
+  </section>
 </template>
 
 <style>
+
+section{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+section h1{
+  padding: 20px;
+  color:white
+}
+
+
 .color-change-section {
   display: flex;
   gap: 2rem;
-  padding: 2rem;
+  padding: 0rem 2rem 2rem;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 </style>
