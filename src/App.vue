@@ -32,6 +32,8 @@ export default {
 .main > h1 {
   font-size: 34px;
   color: white;
+  text-wrap: balance;
+  text-align: center;
 }
 
 .files {
@@ -43,8 +45,8 @@ export default {
 }
 
 @media (max-width: 800px) {
-  section {
-    padding: 1rem;
+  .main {
+    padding: 16px;
   }
 }
 </style>

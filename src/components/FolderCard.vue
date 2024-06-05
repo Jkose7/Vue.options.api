@@ -52,4 +52,10 @@ export default {
     transform: scale(1.02);
   }
 }
+
+@media (max-width: 800px) {  
+  .folder-card h3 {
+    font-size: 15px;
+  }
+}
 </style>

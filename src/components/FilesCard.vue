@@ -7,13 +7,18 @@ export default {
   name: "filesCard",
   props: {
     name: String,
-    loadFiles: Function
+    loadFiles: Function,
   },
   data() {
     return {
       openURL: "",
       downloadURL: "",
     };
+  },
+  computed: {
+    shortName() {
+      return this.name.split("").slice(0, 20).join("");
+    },
   },
   methods: {
     deleteFile() {
@@ -22,7 +27,7 @@ export default {
       deleteObject(fileRef)
         .then((res) => {
           console.log("delete", res);
-          this.loadFiles("myFiles/")
+          this.loadFiles("myFiles/");
         })
         .catch((err) => {
           console.log(err);
@@ -38,7 +43,6 @@ export default {
         console.log(err);
       });
 
-      
     // getBlob(ref(storage, this.name))
     //   .then((URL) => {
     //     this.downloadURL = URL;
@@ -52,7 +56,7 @@ export default {
 
 <template>
   <div class="file-card">
-    <h3>📃 {{ name }}</h3>
+    <h3>📃 {{ shortName }}</h3>
     <div class="file-card-buttons">
       <button>
         <a :download="name" :href="openURL" target="_blank">download</a>
@@ -101,5 +105,26 @@ a {
   text-decoration: none;
   background-color: transparent;
   color: black;
+}
+
+@media (max-width: 800px) {
+  .file-card h3 {
+    font-size: 15px;
+  }
+
+  .file-card-buttons button {
+    padding: 2px 2px;
+    border: none;
+    background-color: rgba(192, 192, 192, 0.99);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 10px;
+    font-weight: bold;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
 }
 </style>

@@ -157,4 +157,10 @@ a {
   cursor: pointer;
   font-size: 24px;
 }
+
+@media (max-width: 800px) {
+  .folder-selection {
+    flex-direction: column;
+  }
+}
 </style>
