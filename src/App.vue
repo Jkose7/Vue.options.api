@@ -1,48 +1,50 @@
 <script>
-import ColorChangeDiv from './components/ColorChangeDiv.vue'
+import File from "./Views/File.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    ColorChangeDiv
-  }
-}
-
+    File,
+  },
+};
 </script>
 
 <template>
-  <section>
-    <h1>Click to change color</h1>
-    <main class="color-change-section">
-      <ColorChangeDiv />
-      <ColorChangeDiv />
-      <ColorChangeDiv />
-    </main>
+  <section class="main">
+    <h1>Upload and Download files ⚡</h1>
+
+    <article class="files">
+      <File/>
+    </article>
   </section>
 </template>
 
-<style>
-
-section{
+<style scoped>
+.main {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
-  justify-content: center;
   align-items: center;
+  gap: 16px;
+  padding: 8rem;
 }
 
-section h1{
-  padding: 20px;
-  color:white
+.main > h1 {
+  font-size: 34px;
+  color: white;
 }
 
-
-.color-change-section {
+.files {
   display: flex;
-  gap: 2rem;
-  padding: 0rem 2rem 2rem;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
+  gap: 8px;
+  align-self: flex-start;
+}
+
+@media (max-width: 800px) {
+  section {
+    padding: 1rem;
+  }
 }
 </style>
