@@ -68,7 +68,7 @@ export default {
   <section class="files-section">
     <div class="upload-file-container">
       <div class="folder-selection">
-        folder: <input type="text" placeholder="/NewFolder/" v-model="folder" />
+        folder: <input type="text" placeholder="NewFolder" v-model="folder" />
         <input type="file" ref="myfile" />
 
       </div>
