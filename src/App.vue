@@ -1,22 +1,26 @@
 <script>
-import File from "./Views/File.vue";
+//import File from "./Views/File.vue";
+import FileDiv from "./Views/FileDiv.vue";
 
 export default {
   name: "App",
   components: {
-    File,
+    //File,
+    FileDiv,
   },
 };
 </script>
 
 <template>
-  <section class="main">
+  <!-- <section class="main">
     <h1>Upload and Download files ⚡</h1>
 
     <article class="files">
       <File/>
     </article>
-  </section>
+  </section> -->
+
+  <FileDiv></FileDiv>
 </template>
 
 <style scoped>

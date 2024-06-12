@@ -38,6 +38,7 @@ export default {
 .folder-card-buttons {
   display: flex;
   gap: 8px;
+
 }
 
 .folder-card-buttons button {
@@ -47,6 +48,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
+  font-size: 18px;
 
   &:hover {
     transform: scale(1.02);
