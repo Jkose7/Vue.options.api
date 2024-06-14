@@ -104,7 +104,7 @@ export default {
   >
     <label class="color-change-content">
       <h1>{{ nameMethod }}</h1>
-      <div v-if="id === '1'">
+      <div v-if="id === '1'" class="uploadForm">
         <input type="file" ref="myfile" />
         folder: <input type="text" placeholder="newFolder" v-model="folder" />
         <button @click="uploadFile">upload</button>
@@ -141,6 +141,7 @@ export default {
   cursor: pointer;
   background-color: aquamarine;
   transition: all 0.3s;
+  overflow: hidden;
 
   &:hover {
     transform: scale(1.01);
@@ -156,18 +157,42 @@ export default {
   width: 100%;
   height: 100%;
 
-  & div {
+  > .uploadForm {
     display: flex;
     flex-direction: column;
     gap: 4px;
 
+    & input[type = "text"] {
+      border-radius: 4px;
+      padding: 10px;
+      border: 0;
+    }
+
     & button {
       padding: 5px;
+      border-radius: 4px;
+      border: 0;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all .3s ease-in-out;
+
+      &:hover{
+        background-color: #bbbbbb;
+      }
     }
+  }
+
+  > .results {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   & input {
     padding: 3px;
   }
 }
+
+
 </style>

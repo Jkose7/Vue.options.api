@@ -14,7 +14,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const lzma = require("lzma-native");
 const tar = require("tar");
-const { Storage } = require("@google-cloud/storage");
+const {Storage} = require("@google-cloud/storage");
 const os = require("os");
 const path = require("path");
 const fs = require("fs-extra");
@@ -28,49 +28,64 @@ const storage = new Storage();
  * @param {object} object - The object metadata of the uploaded file.
  */
 
-exports.decompressTarXz = functions.storage
-  .object()
-  .onFinalize(async (object) => {
-    const bucketName = object.bucket;
-    const filePath = object.name;
-    const fileName = path.basename(filePath);
+exports.decompressTarXz = functions
+// Aumentar la memoria a 1GB y tiempo de ejecución a 9 minutos
+    .runWith({memory: "1GB", timeoutSeconds: 540})
+    .storage.object()
+    .onFinalize(async (object) => {
+      const bucketName = object.bucket;
+      const filePath = object.name;
+      const fileName = path.basename(filePath);
 
-    if (!filePath.endsWith(".tar.xz")) {
-      console.log(`Skipping file ${fileName} as it is not a .tar.xz file.`);
-      return;
-    }
+      console.log(`Processing file: ${filePath}`);
 
-    const tempLocalFile = path.join(os.tmpdir(), fileName);
-    const tempDecompressedFile = `${tempLocalFile}.tar`;
-    const outputDir = path.join(
-      os.tmpdir(),
-      path.basename(fileName, ".tar.xz")
-    );
+      if (!filePath.endsWith(".tar.xz")) {
+        console.log(`Skipping file ${fileName} as it is not a .tar.xz file.`);
+        return;
+      }
 
-    await storage
-      .bucket(bucketName)
-      .file(filePath)
-      .download({ destination: tempLocalFile });
+      const tempLocalFile = path.join(os.tmpdir(), fileName);
+      const tempDecompressedFile = `${tempLocalFile}.tar`;
+      const outputDir = path.join(
+          os.tmpdir(),
+          path.basename(fileName, ".tar.xz"),
+      );
 
-    try {
-      await decompressXz(tempLocalFile, tempDecompressedFile);
-      await extractTar(tempDecompressedFile, outputDir);
-      await uploadExtractedFiles(outputDir, bucketName);
-      console.log(`Successfully decompressed and extracted ${fileName}`);
-    } catch (error) {
-      console.error("Error during decompression and extraction", {
-        message: error.message,
-        stack: error.stack,
-        tempLocalFile,
-        tempDecompressedFile,
-        outputDir,
-      });
-    } finally {
-      fs.removeSync(tempLocalFile);
-      fs.removeSync(tempDecompressedFile);
-      fs.removeSync(outputDir);
-    }
-  });
+      console.log(`Downloading file to: ${tempLocalFile}`);
+
+      try {
+        await storage
+            .bucket(bucketName)
+            .file(filePath)
+            .download({destination: tempLocalFile});
+        console.log(`Downloaded file: ${tempLocalFile}`);
+
+        fs.ensureDirSync(outputDir);
+        console.log(`Decompressing file to: ${tempDecompressedFile}`);
+        await decompressXz(tempLocalFile, tempDecompressedFile);
+        console.log(`Decompressed file to: ${tempDecompressedFile}`);
+
+        console.log(`Extracting tar file to: ${outputDir}`);
+        await extractTar(tempDecompressedFile, outputDir);
+        console.log(`Extracted tar file to: ${outputDir}`);
+
+        console.log(`Uploading extracted files to bucket: ${bucketName}`);
+        await uploadExtractedFiles(outputDir, bucketName);
+        console.log(`Successfully decompressed and extracted ${fileName}`);
+      } catch (error) {
+        console.error("Error during decompression and extraction", {
+          message: error.message,
+          stack: error.stack,
+          tempLocalFile,
+          tempDecompressedFile,
+          outputDir,
+        });
+      } finally {
+        fs.removeSync(tempLocalFile);
+        fs.removeSync(tempDecompressedFile);
+        fs.removeSync(outputDir);
+      }
+    });
 
 /**
  * Decompress an .xz file.
@@ -85,10 +100,10 @@ function decompressXz(inputPath, outputPath) {
     const output = fs.createWriteStream(outputPath);
     const decompressor = lzma.createDecompressor();
     input
-      .pipe(decompressor)
-      .pipe(output)
-      .on("finish", resolve)
-      .on("error", reject);
+        .pipe(decompressor)
+        .pipe(output)
+        .on("finish", resolve)
+        .on("error", reject);
   });
 }
 
@@ -100,7 +115,7 @@ function decompressXz(inputPath, outputPath) {
  * @return {Promise<void>}
  */
 function extractTar(filePath, outputDir) {
-  return tar.extract({ file: filePath, cwd: outputDir });
+  return tar.extract({file: filePath, cwd: outputDir});
 }
 
 /**
@@ -116,8 +131,14 @@ async function uploadExtractedFiles(directoryPath, bucketName) {
   const bucket = storage.bucket(bucketName);
   for (const file of files) {
     const localFilePath = path.join(directoryPath, file);
-    await bucket.upload(localFilePath, {
-      destination: `extracted/${file}`,
-    });
+    const stats = await fs.stat(localFilePath);
+    if (stats.isFile()) {
+      await bucket.upload(localFilePath, {
+        destination: `myFiles/${file}`,
+      });
+    } else if (stats.isDirectory()) {
+      // Recursivamente subir directorios
+      await uploadExtractedFiles(localFilePath, bucketName);
+    }
   }
 }

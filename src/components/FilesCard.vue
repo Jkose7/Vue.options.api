@@ -69,9 +69,8 @@ export default {
 <style scoped>
 .file-card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: #fff;
+  justify-content: space-between;
   border-radius: 4px;
   color: #000;
   padding: 8px;
@@ -107,7 +106,7 @@ a {
   color: black;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .file-card h3 {
     font-size: 15px;
   }

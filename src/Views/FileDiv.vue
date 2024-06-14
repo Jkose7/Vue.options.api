@@ -41,16 +41,17 @@ export default {
 <style>
 .main-container {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
-  padding: 2rem;
+  padding: 8rem;
   gap: 2rem;
 }
 
 @media (max-width: 1000px) {
   .main-container {
-    flex-direction: column;
     height: 100%;
+    padding: 1rem;
   }
 }
 </style>
